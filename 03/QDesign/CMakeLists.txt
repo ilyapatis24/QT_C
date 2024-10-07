@@ -53,4 +53,4 @@ else()
     endif()
 endif()
 
-target_link_libraries(QDesign PRIVATE Qt5::Widgets)
+target_link_libraries(QDesign Qt${QT_VERSION_MAJOR}::Widgets)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
-    <height>608</height>
+    <width>369</width>
+    <height>296</height>
    </rect>
   </property>
   <property name="font">
@@ -24,7 +24,7 @@
      <widget class="QPushButton" name="pushButton">
       <property name="maximumSize">
        <size>
-        <width>300</width>
+        <width>200</width>
         <height>30</height>
        </size>
       </property>
@@ -40,17 +40,23 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>795</width>
-     <height>23</height>
+     <width>369</width>
+     <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuMainWindow">
+    <property name="title">
+     <string>MainWindow</string>
+    </property>
+   </widget>
+   <addaction name="menuMainWindow"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

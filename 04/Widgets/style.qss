@@ -1,0 +1,20 @@
+QWidget {
+    max-width: 450px;
+    max-height: 500px;
+}
+
+QGroupBox {
+    padding: 20px;
+}
+
+QPushButton {
+    max-width: 200px;
+    max-height: 30px;
+    margin: 10px 100px;
+}
+
+QComboBox, QProgressBar {
+    max-width: 200px;
+    max-height: 30px;
+    margin: 10px 100px;
+}

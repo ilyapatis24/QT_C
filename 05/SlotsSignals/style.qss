@@ -1,3 +1,8 @@
+* {
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+}
+
 QWidget {
     max-width: 400px;
     max-height: 500px;
@@ -12,6 +17,8 @@ QTextBrowser {
     min-width: 250px;
     min-height: 250px;
     margin: 10px 20px;
+    font-size: 20px;
+
 }
 
 QPushButton {
@@ -19,9 +26,4 @@ QPushButton {
     background: #f73;
     color: white;
     text-decoration: none;
-}
-
-QLabel, QPushButton {
-    font-family: "Times New Roman", serif;
-    font-weight: bold;
 }

@@ -13,9 +13,6 @@ class StopWatch : public QObject
 
 public:
 
-    QString strCurrentTime;
-    QString strCircleTime;
-
     explicit StopWatch(QObject *parent = nullptr);
 
     ~StopWatch();
@@ -23,6 +20,8 @@ public:
     void updateTime();
     void startTimer();
     void stopTimer();
+    QString& getCurrentTime();
+    QString& getCircleTime();
 
 public slots:
 
@@ -35,13 +34,13 @@ signals:
     void sig_updateTime(QString &strCurrentTime);
 
 private:
-
     QTimer *timer;
     QTime time;
     QTime stopTime;
+    QString strCurrentTime;
+    QString strCircleTime;
     int circleTiming;
     int count;
-
 };
 
 #endif // STOPWATCH_H

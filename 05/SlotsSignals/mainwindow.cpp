@@ -51,13 +51,13 @@ void MainWindow::on_pb_start_clicked()
 void MainWindow::on_pb_circle_clicked()
 {
     emit sig_circleTime();
-    QString text = stopwatch->strCircleTime;
+    QString text = stopwatch->getCircleTime();
     ui->appBrowser->append(text);
 }
 
 void MainWindow::on_pb_clear_clicked()
 {
-    ui->appLabel->setText("00:00");
+    ui->appLabel->setText("00:00.0");
     ui->appBrowser->clear();
     emit sig_clearTime();
 }

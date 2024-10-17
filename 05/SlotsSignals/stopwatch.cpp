@@ -2,13 +2,13 @@
 
 StopWatch::StopWatch(QObject *parent) : QObject{parent}
 {
-    time.setHMS(0, 0, 0);
-    stopTime.setHMS(0, 0, 0);
+    time.setHMS(0, 0, 0, 0);
+    stopTime.setHMS(0, 0, 0, 0);
     circleTiming = 0;
     count = 1;
 
     timer = new QTimer(this);
-    timer->setInterval(1000);
+    timer->setInterval(100);
     connect(timer, &QTimer::timeout, this, &StopWatch::updateTime);
 }
 
@@ -19,8 +19,8 @@ StopWatch::~StopWatch()
 
 void StopWatch::updateTime()
 {
-    time = time.addSecs(1);
-    strCurrentTime = time.toString("mm:ss");
+    time = time.addMSecs(100);
+    strCurrentTime = time.toString("mm:ss.z");
     emit sig_updateTime(strCurrentTime);
 }
 
@@ -35,6 +35,16 @@ void StopWatch::stopTimer()
     timer->stop();
 }
 
+QString &StopWatch::getCurrentTime()
+{
+    return strCurrentTime;
+}
+
+QString &StopWatch::getCircleTime()
+{
+    return strCircleTime;
+}
+
 void StopWatch::circleTime()
 {
     circleTiming = stopTime.secsTo(time);
@@ -46,6 +56,6 @@ void StopWatch::circleTime()
 void StopWatch::clearTime()
 {
     count = 1;
-    time.setHMS(0, 0, 0);
-    stopTime.setHMS(0, 0, 0);
+    time.setHMS(0, 0, 0, 0);
+    stopTime.setHMS(0, 0, 0, 0);
 }

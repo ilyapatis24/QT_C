@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pb_start->setText("Старт");
 
     connect(stopwatch, &StopWatch::sig_updateTime, this, &MainWindow::rcv_updateTime);
-    connect(this, &MainWindow::sig_circleTime, stopwatch, &StopWatch::circleTime);
+//    connect(this, &MainWindow::sig_circleTime, stopwatch, &StopWatch::circleTime);
     connect(this, &MainWindow::sig_clearTime, stopwatch, &StopWatch::clearTime);
 }
 

@@ -96,8 +96,8 @@
    <slot>on_pb_clear_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>328</x>
-     <y>353</y>
+     <x>341</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
      <x>356</x>

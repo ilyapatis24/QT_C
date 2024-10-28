@@ -15,7 +15,7 @@ public:
     ExampleRace(QMutex* m) : mut(m){
     }
     //Передаем указатель на переменную которую будем инкрементировать, флак включения мьютексов, и количесво итераций
-    void DoWork(uint32_t* inc, bool mutexOn, int numIterat);
+    void DoWork(uint64_t* inc, bool mutexOn, int numIterat);
 
 signals:
 
@@ -51,7 +51,7 @@ public:
     }
 
 signals:
-    void operate( uint32_t *num, bool mutexOn, int numIterat );
+    void operate( uint64_t *num, bool mutexOn, int numIterat );
     void sig_WorkFinish( void );
 
 };

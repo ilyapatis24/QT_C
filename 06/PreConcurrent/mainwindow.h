@@ -26,7 +26,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    uint32_t number = 0, countFinish = 0;
+    uint64_t number = 0, countFinish = 0;
 
     QMutex m;
     Controller *race1;

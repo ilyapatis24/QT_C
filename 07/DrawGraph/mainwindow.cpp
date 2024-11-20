@@ -8,15 +8,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->pb_clearResult->setCheckable(true);
 
-
+       series = new QLineSeries();
+       QObject::connect(this, MainWindow::sig_displayChart,this, MainWindow::DisplayChart);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete series;
 }
-
-
 
 /****************************************************/
 /*!
@@ -165,6 +165,20 @@ void MainWindow::DisplayResult(QVector<double> mins, QVector<double> maxs)
     ui->te_Result->append("Второй максимум " + QString::number(maxs.at(1)));
 }
 
+void MainWindow::DisplayChart()
+{
+    QChart *chart = new QChart();
+    chart->legend()->hide();  // скрыть легенду
+    chart->addSeries(series);  // добавить серию на график
+    chart->createDefaultAxes();  // Создать ось на основе серии, добавленной к диаграмме
+    chart->setTitle("Simple line chart");  // Устанавливаем заголовок графика
+
+    QChartView *chartView = new QChartView(chart);
+    chartView->resize(400, 300);
+    chartView->show();
+
+}
+
 
 /****************************************************/
 /*!
@@ -196,6 +210,7 @@ void MainWindow::on_pb_start_clicked()
         mb.setWindowTitle("Ошибка");
         mb.setText("Выберите файл!");
         mb.exec();
+
         return;
     }
 
@@ -225,17 +240,20 @@ void MainWindow::on_pb_start_clicked()
                                                 DisplayResult(mins, maxs);
 
                                                 /*
-                                                 * Тут необходимо реализовать код наполнения серии
+                                                 * код наполнения серии
                                                  * и вызов сигнала для отображения графика
                                                  */
+
+                                                for (int i = 0; i < FD; i++) {
+                                                series->append(i, res[i]);
+                                                }
+                                                emit sig_displayChart();
 
                                              };
 
     auto result = QtConcurrent::run(read)
                                .then(process)
                                .then(findMax);
-
-
 
 }
 

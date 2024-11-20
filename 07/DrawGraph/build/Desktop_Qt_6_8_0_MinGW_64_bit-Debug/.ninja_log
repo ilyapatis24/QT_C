@@ -1,9 +1,0 @@
-# ninja log v6
-7	2789	7538005149205247	DrawGraph_autogen/timestamp	213c41bd77fa73d3
-7	2789	7538005149205247	DrawGraph_autogen/mocs_compilation.cpp	213c41bd77fa73d3
-7	2789	7538005149205247	D:/qt-homeworks/07/DrawGraph/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/DrawGraph_autogen/timestamp	213c41bd77fa73d3
-7	2789	7538005149205247	D:/qt-homeworks/07/DrawGraph/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/DrawGraph_autogen/mocs_compilation.cpp	213c41bd77fa73d3
-2800	16927	7538005150736793	CMakeFiles/DrawGraph.dir/DrawGraph_autogen/mocs_compilation.cpp.obj	ef42b0af80357b85
-2804	16940	7538005150786812	CMakeFiles/DrawGraph.dir/main.cpp.obj	f3b35d4d6507f135
-2809	18545	7538005150827413	CMakeFiles/DrawGraph.dir/mainwindow.cpp.obj	b4038e1b823e35d9
-18546	19432	7538005308197090	DrawGraph.exe	f9fc7f4a88a875ba

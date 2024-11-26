@@ -17,9 +17,9 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-
-
-
+        spinner.h
+        spinner.cpp
+        spinner.qrc
 )
 
 
@@ -30,6 +30,7 @@ add_executable(DrawGraph
 
 target_link_libraries(DrawGraph Qt6::Widgets
                                       Qt6::Concurrent
-                                      Qt6::Charts)
+                                      Qt6::Charts
+                                    )
 
 

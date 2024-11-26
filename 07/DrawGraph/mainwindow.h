@@ -12,6 +12,7 @@
 #include <QtCharts>
 #include <QChartView>
 #include <QList>
+#include "spinner.h"
 
 #define FD 1000.0 //частота дискретизации
 
@@ -50,14 +51,16 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QChart* chart;
+    QChartView* chartView;
+    QLineSeries* series;
+    SpinnerSolution::Spinner* spinner;
     QString pathToFile = "";
     uint8_t numberSelectChannel = 0xEA;
 
     QVector<uint32_t> readData;
     QVector<double> procesData;
     QVector<double> mins, maxs;
-
-    QLineSeries* series;
 
 };
 #endif // MAINWINDOW_H

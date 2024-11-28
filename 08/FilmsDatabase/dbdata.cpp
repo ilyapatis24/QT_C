@@ -8,7 +8,7 @@ DbData::DbData(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //  Чтобы всё время не вбивать руками
+    //  Данные для подключения к БД
     ui->le_host->setText("981757-ca08998.tmweb.ru");
     ui->le_dbName->setText("netology_cpp");
     ui->le_login->setText("netology_usr_cpp");

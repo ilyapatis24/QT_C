@@ -131,13 +131,11 @@ void MainWindow::on_pb_request_clicked()
 void MainWindow::ScreenQueryFromDB(QSqlQueryModel *model)
 {
     ui->tb_result->setModel(model);
-    ///Тут должен быть код ДЗ
 }
 
 void MainWindow::ScreenTableFromDB(QSqlTableModel *model)
 {
     ui->tb_result->setModel(model);
-    ///Тут должен быть код ДЗ
 }
 /*!
  * \brief Метод изменяет стотояние формы в зависимости от статуса подключения к БД

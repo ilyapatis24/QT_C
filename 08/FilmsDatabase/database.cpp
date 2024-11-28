@@ -5,7 +5,7 @@ DataBase::DataBase(QObject *parent)
 {
 
     dataBase = new QSqlDatabase();
-    modelQuery= new QSqlQueryModel(this);
+    modelQuery = new QSqlQueryModel(this);
 }
 
 DataBase::~DataBase()
@@ -21,7 +21,7 @@ DataBase::~DataBase()
 void DataBase::AddDataBase(QString driver, QString nameDB)
 {
     *dataBase = QSqlDatabase::addDatabase(driver, nameDB);
-    modelTable= new QSqlTableModel(this, *dataBase);
+    modelTable = new QSqlTableModel(this, *dataBase);
 
 }
 

@@ -114,7 +114,8 @@ void MainWindow::on_pb_request_clicked()
     }
     else
     {
-        request = "*";
+        request = "SELECT title, description, release_year, language_id, rental_duration, "
+                  "length, rating, special_features, fulltext FROM film ";
     }
 
     auto req = [&]{dataBase->RequestToDB(request);};
@@ -131,11 +132,13 @@ void MainWindow::on_pb_request_clicked()
 void MainWindow::ScreenQueryFromDB(QSqlQueryModel *model)
 {
     ui->tb_result->setModel(model);
+    ui->tb_result->resizeColumnsToContents();
 }
 
 void MainWindow::ScreenTableFromDB(QSqlTableModel *model)
 {
     ui->tb_result->setModel(model);
+    ui->tb_result->resizeColumnsToContents();
 }
 /*!
  * \brief Метод изменяет стотояние формы в зависимости от статуса подключения к БД

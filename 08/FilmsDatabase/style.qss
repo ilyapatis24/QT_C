@@ -1,0 +1,8 @@
+QMainWindow {
+    min-width: 1100 px;
+    min-height: 150 px;
+}
+
+QTableView {
+    min-width: 150 px;
+}

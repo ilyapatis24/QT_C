@@ -22,6 +22,7 @@ set(PROJECT_SOURCES
     dbdata.h
     dbdata.cpp
     dbdata.ui
+    resources.qrc
 )
 
 add_executable(FilmsDatabase

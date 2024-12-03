@@ -2,7 +2,6 @@
 
 UDPworker::UDPworker(QObject *parent) : QObject(parent) {}
 
-
 /*!
  * @brief Метод инициализирует UDP сервер
  */

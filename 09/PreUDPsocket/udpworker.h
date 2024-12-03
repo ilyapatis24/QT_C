@@ -6,16 +6,14 @@
 #include <QDateTime>
 
 
-#define BIND_PORT 12345
-
 class UDPworker : public QObject
 {
     Q_OBJECT
 public:
     explicit UDPworker(QObject *parent = nullptr);
-    void InitSocket( void );
-    void ReadDatagram( QNetworkDatagram datagram);
-    void SendDatagram(QByteArray data );
+    void InitSocket( int bind_port);
+    void ReadDatagram(QNetworkDatagram datagram);
+    void SendDatagram(QByteArray data);
 
 
 private slots:
@@ -23,9 +21,11 @@ private slots:
 
 private:
     QUdpSocket* serviceUdpSocket;
+    int bindPort_;
 
 signals:
     void sig_sendTimeToGUI(QDateTime data);
+    void sig_sendInputTextToGUI(QString data, QString address, int port);
 
 };
 

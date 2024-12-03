@@ -22,15 +22,17 @@ public:
 private slots:
     void on_pb_start_clicked();
     void DisplayTime(QDateTime data);
+    void DisplayInputText(QString data, QString address, int port);
     void on_pb_stop_clicked();
+
+    void on_pb_sendDatagram_clicked();
 
 private:
     Ui::MainWindow *ui;
     QTimer* timer;
     UDPworker* udpWorker;
     uint32_t counterPck = 0;
-
-
+    UDPworker* udpWorkerSendDatagram;
 
 };
 #endif // MAINWINDOW_H

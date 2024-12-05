@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
         outStr << dateTime;
 
         udpWorker->SendDatagram(dataToSend);
-        timer->start(TIMER_DELAY); // не думаю, что это нужно
+        timer->start(TIMER_DELAY);
 
     });
 

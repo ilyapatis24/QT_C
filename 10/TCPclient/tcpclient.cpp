@@ -19,7 +19,7 @@ TCPclient::TCPclient(QObject *parent) : QObject(parent)
     //Соединение сигнала отключения
     connect(socket, &QTcpSocket::disconnected, this, &TCPclient::sig_Disconnected);
     //Соединение с методом обработки входящих данных
-    connect(socket, &QTcpSocket::readyRead, this, &TCPclient::ReadyReed);
+    connect(socket, &QTcpSocket::readyRead, this, &TCPclient::ReadyRead);
 }
 
 
@@ -117,7 +117,7 @@ void TCPclient::DisconnectFromHost()
 }
 
 
-void TCPclient::ReadyReed()
+void TCPclient::ReadyRead()
 {
 
     QDataStream incStream(socket);

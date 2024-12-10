@@ -50,7 +50,7 @@ MainWindow::~MainWindow()
 }
 
 /*!
- * \brief Группа методо отображения различных данных
+ * \brief Группа методов отображения различных данных
  */
 void MainWindow::DisplayTime(QDateTime time)
 {

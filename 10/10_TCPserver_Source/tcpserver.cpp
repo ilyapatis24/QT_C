@@ -43,6 +43,7 @@ TCPserver::TCPserver(QObject *parent, uint16_t bindPort)
 {
 
     tcpServer = new QTcpServer(this);
+
     if(tcpServer->listen(QHostAddress::Any, bindPort)){
         qDebug() << "Server started on port: " << BIND_PORT;
         startTime = QTime::currentTime();
@@ -67,19 +68,18 @@ TCPserver::TCPserver(QObject *parent, uint16_t bindPort)
 
         stat.revPck++;
 
-        QTcpSocket* incSocket = tcpServer->nextPendingConnection();
-        sockets.insert(incSocket,incSocket->socketDescriptor());
+        incSocket = tcpServer->nextPendingConnection();
 
         connect(incSocket, &QTcpSocket::readyRead, this, &TCPserver::ReadyRead);
+        connect(incSocket, &QTcpSocket::disconnected, incSocket, [&]{
 
-        connect(incSocket, &QTcpSocket::disconnected, this, [&]{
-            QTcpSocket* delSocket = (QTcpSocket*)sender();
-            qDebug() << "Socket " <<  sockets.find(delSocket).value() << " disconnected!";
-            delSocket->deleteLater();
-            sockets.erase(sockets.find(delSocket));
+            qDebug() << "Socket " <<  incSocket->socketDescriptor() << " disconnected!";
+            incSocket->deleteLater();
+            sockets.remove(sockets.indexOf(incSocket));
+
         });
 
-
+        sockets.push_back(incSocket);
 
         qDebug() << "Socket " <<  incSocket->socketDescriptor() << " connected!";
 
@@ -186,7 +186,7 @@ void TCPserver::ReadyRead( )
 
     stat.revPck++;
 
-    QTcpSocket* incSocket = (QTcpSocket*)sender();
+    incSocket = (QTcpSocket*)sender();
     QDataStream incStream(incSocket);
 
     if(incStream.status() == QDataStream::Ok){
@@ -238,10 +238,6 @@ void TCPserver::ReadyRead( )
                             break;
                         }
                     }
-                    header.id = 0;
-                    header.idData = 0;
-                    header.len = 0;
-                    header.status = 0;
                 }
             }
         }
@@ -252,6 +248,7 @@ void TCPserver::ReadyRead( )
             if(queue.find(incSocket->socketDescriptor()) == queue.end()){
                 queue.insert(incSocket->socketDescriptor(), header);
             }
+            return;
         }
         //В противном случае обрабатываем сообщение
         else{
@@ -259,6 +256,3 @@ void TCPserver::ReadyRead( )
         }
     }
 }
-
-
-

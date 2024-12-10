@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(10_TCPserver LANGUAGES CXX)
+project(10_TCPserver_Source LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -13,12 +13,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 COMPONENTS Network Core REQUIRED)
 
-add_executable(10_TCPserver
+add_executable(10_TCPserver_Source
   main.cpp
   tcpserver.h
   tcpserver.cpp
   structs.h
 )
 
-target_link_libraries(10_TCPserver Qt6::Core
+target_link_libraries(10_TCPserver_Source Qt6::Core
                                    Qt6::Network)

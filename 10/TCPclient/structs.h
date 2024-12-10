@@ -28,8 +28,8 @@ enum StatusMessages{
     ERR_NO_FREE_SPACE = 10, // Недостаточно свободного места
     ERR_CONNECT_TO_HOST = 11,
 
-    ERR_NO_FUNCT = 20   //Функционал не реализован
-
+    ERR_NO_FUNCT = 20,   //Функционал не реализован
+    ERR_ZERO_LEN = 21
 
 
 };

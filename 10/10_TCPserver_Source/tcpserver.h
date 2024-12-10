@@ -22,8 +22,8 @@ public:
 
 private:
     QTcpServer* tcpServer;
-   // QTcpSocket* incSocket;
-    QMap<QTcpSocket*,int> sockets;
+    QTcpSocket* incSocket;
+    QVector<QTcpSocket*> sockets;
 
     //Статистика сервера
     uint32_t freeSpace = FULL_FREE_SERVER_SPACE;

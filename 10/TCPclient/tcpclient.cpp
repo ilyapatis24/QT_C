@@ -1,5 +1,27 @@
 #include "tcpclient.h"
 
+/*
+ * Поскольку мы являемся клиентом, инициализацию сокета
+ * проведем в конструкторе. Также необходимо соединить
+ * сокет со всеми необходимыми нам сигналами.
+*/
+TCPclient::TCPclient(QObject *parent) : QObject(parent)
+{
+    socket = new QTcpSocket(this);
+
+    //Соединение обработчиков статусов соединения
+    connect(socket, &QTcpSocket::connected, this, [&](){
+        emit sig_connectStatus(STATUS_SUCCES);
+    });
+    connect(socket, &QTcpSocket::errorOccurred, this, [&](){
+        emit sig_connectStatus(ERR_CONNECT_TO_HOST);});
+
+    //Соединение сигнала отключения
+    connect(socket, &QTcpSocket::disconnected, this, &TCPclient::sig_Disconnected);
+    //Соединение с методом обработки входящих данных
+    connect(socket, &QTcpSocket::readyRead, this, &TCPclient::ReadyReed);
+}
+
 
 
 
@@ -13,6 +35,7 @@ QDataStream &operator >>(QDataStream &out, ServiceHeader &data){
     out >> data.idData;
     out >> data.status;
     out >> data.len;
+
     return out;
 };
 QDataStream &operator <<(QDataStream &in, ServiceHeader &data){
@@ -25,17 +48,32 @@ QDataStream &operator <<(QDataStream &in, ServiceHeader &data){
     return in;
 };
 
-
-
-/*
- * Поскольку мы являемся клиентом, инициализацию сокета
- * проведем в конструкторе. Также необходимо соединить
- * сокет со всеми необходимыми нам сигналами.
+/* StatServer
+ * Для работы с потоками наши данные необходимо сериализовать.
+ * Поскольку типы данных не стандартные перегрузим оператор << Для работы с StatServer
 */
-TCPclient::TCPclient(QObject *parent) : QObject(parent)
-{
+QDataStream &operator >>(QDataStream &out, StatServer &data){
 
-}
+    out >> data.incBytes;
+    out >> data.sendBytes;
+    out >> data.revPck;
+    out >> data.sendPck;
+    out >> data.workTime;
+    out >> data.clients;
+    return out;
+};
+QDataStream &operator <<(QDataStream &in, StatServer &data){
+
+    in << data.incBytes;
+    in << data.sendBytes;
+    in << data.revPck;
+    in << data.sendPck;
+    in << data.workTime;
+    in << data.clients;
+
+    return in;
+};
+
 
 /* write
  * Метод отправляет запрос на сервер. Сериализировать будем
@@ -43,8 +81,11 @@ TCPclient::TCPclient(QObject *parent) : QObject(parent)
 */
 void TCPclient::SendRequest(ServiceHeader head)
 {
-
-
+    //Сериализация данных в массив байт
+    QByteArray sendHdr;
+    QDataStream outStr(&sendHdr, QIODevice::WriteOnly);
+    outStr << head;
+    socket->write(sendHdr);
 }
 
 /* write
@@ -52,8 +93,12 @@ void TCPclient::SendRequest(ServiceHeader head)
 */
 void TCPclient::SendData(ServiceHeader head, QString str)
 {
+    QByteArray sendHdr;
+    QDataStream outStr(&sendHdr, QIODevice::WriteOnly);
+    outStr << head;
+    outStr << str;
 
-
+    socket->write(sendHdr);
 }
 
 /*
@@ -61,14 +106,14 @@ void TCPclient::SendData(ServiceHeader head, QString str)
  */
 void TCPclient::ConnectToHost(QHostAddress host, uint16_t port)
 {
-
+    socket->connectToHost(host, port);
 }
 /*
  * \brief Метод отключения от сервера
  */
 void TCPclient::DisconnectFromHost()
 {
-
+    socket->disconnectFromHost();
 }
 
 
@@ -142,14 +187,44 @@ void TCPclient::ProcessingData(ServiceHeader header, QDataStream &stream)
 
     switch (header.idData){
 
-        case GET_TIME:
-        case GET_SIZE:
-        case GET_STAT:
-        case SET_DATA:
-        case CLEAR_DATA:
-        default:
-            return;
+    case GET_TIME: {
+        QDateTime time;
+        stream >> time;
+        emit sig_sendTime(time);
+        break;
+    }
 
+    case GET_SIZE: {
+        uint32_t len;
+        stream >> len;
+        emit sig_sendFreeSize(len);
+        break;
+    }
+    case GET_STAT: {
+        StatServer status;
+        stream >> status;
+        emit sig_sendStat(status);
+        break;
+    }
+
+    case SET_DATA: {
+        QString message;
+        stream >> message;
+        if (header.status == ERR_NO_FREE_SPACE)
+        {
+            message = "ERR_NO_FREE_SPACE";
         }
+        emit sig_SendReplyForSetData(message);
+        break;
+    }
+    case CLEAR_DATA: {
+        QString message = "данные на сервере очищены";
+        emit sig_SendReplyForSetData(message);
+        break;
+    }
+    default:
+        return;
+
+    }
 
 }

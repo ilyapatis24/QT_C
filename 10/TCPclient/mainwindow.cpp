@@ -33,10 +33,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
- /*
+    /*
   * Соединяем сигналы со слотами
  */
-
+    connect(client, &TCPclient::sig_sendTime, this, &MainWindow::DisplayTime);
+    connect(client, &TCPclient::sig_connectStatus, this, &MainWindow::DisplayConnectStatus);
+    connect(client, &TCPclient::sig_sendStat, this, &MainWindow::DisplayStat);
+    connect(client, &TCPclient::sig_SendReplyForSetData, this, &MainWindow::SetDataReply);
+    connect(client, &TCPclient::sig_sendFreeSize, this, &MainWindow::DisplayFreeSpace);
 
 }
 
@@ -50,25 +54,34 @@ MainWindow::~MainWindow()
  */
 void MainWindow::DisplayTime(QDateTime time)
 {
-
+    ui->tb_result->append("Время на сервере: " + time.toString());
 }
 void MainWindow::DisplayFreeSpace(uint32_t freeSpace)
 {
-
+    ui->tb_result->append("Свободное место на сервере: " + QString::number(freeSpace));
 }
 void MainWindow::SetDataReply(QString replyString)
 {
-
+    ui->tb_result->append("Ответ от сервера на запрос: " + replyString);
 }
 void MainWindow::DisplayStat(StatServer stat)
 {
+    ui->tb_result->append("Принято байт: " + QString::number(stat.incBytes));
+    ui->tb_result->append("Передано байт: " + QString::number(stat.sendBytes));
+    ui->tb_result->append("Принято пакетов: " + QString::number(stat.revPck));
+    ui->tb_result->append("Передано пакетов: " + QString::number(stat.sendPck));
+    ui->tb_result->append("Время работы сервера в секундах: " + QString::number(stat.workTime));
+    ui->tb_result->append("Количество подключенных пакетов: " + QString::number(stat.clients));
+
 
 }
 void MainWindow::DisplayError(uint16_t error)
 {
     switch (error) {
     case ERR_NO_FREE_SPACE:
+        ui->tb_result->append("Недостаточно свободного места на сервере");
     case ERR_NO_FUNCT:
+        ui->tb_result->append("Функционал не реализован");
     default:
         break;
     }
@@ -122,11 +135,11 @@ void MainWindow::on_pb_connect_clicked()
         uint16_t port = ui->spB_port->value();
 
         QString ip = ui->spB_ip4->text() + "." +
-                     ui->spB_ip3->text() + "." +
-                     ui->spB_ip2->text() + "." +
-                     ui->spB_ip1->text();
-
-        client->ConnectToHost(QHostAddress(ip), port);
+                ui->spB_ip3->text() + "." +
+                ui->spB_ip2->text() + "." +
+                ui->spB_ip1->text();
+        QHostAddress address(ip);
+        client->ConnectToHost(address, port);
 
     }
     else{
@@ -143,31 +156,50 @@ void MainWindow::on_pb_connect_clicked()
 void MainWindow::on_pb_request_clicked()
 {
 
-   ServiceHeader header;
+    ServiceHeader header;
 
-   header.id = ID;
-   header.status = STATUS_SUCCES;
-   header.len = 0;
+    header.id = ID;
+    header.status = STATUS_SUCCES;
+    header.len = 0;
 
-   switch (ui->cb_request->currentIndex()){
+    switch (ui->cb_request->currentIndex()){
 
-       //Получить время
-       case 0:
-       //Получить свободное место
-       case 1:
-       //Получить статистику
-       case 2:
-       //Отправить данные
-       case 3:
-       //Очистить память на сервере
-       case 4:
-       default:
-       ui->tb_result->append("Такой запрос не реализован в текущей версии");
-       return;
+    //Получить время
+    case 0:
+        header.idData = GET_TIME;
+        break;
+        //Получить свободное место
+    case 1:
+        header.idData = GET_SIZE;
+        break;
+        //Получить статистику
+    case 2:
+        header.idData = GET_STAT;
+        break;
+        //Отправить данные
+    case 3:
+        header.idData = SET_DATA;
+        break;
+        //Очистить память на сервере
+    case 4:
+        header.idData = CLEAR_DATA;
+        break;
+    default:
+        ui->tb_result->append("Такой запрос не реализован в текущей версии");
+        return;
 
-   }
+    }
 
-   client->SendRequest(header);
+    if (header.idData != SET_DATA)
+    {
+        client->SendRequest(header);
+    }
+    else
+    {
+        QString data = ui->le_data->text();
+        header.len =  data.toUtf8().size() + sizeof(int);
+        client->SendData(header, data);
+    }
 
 }
 
